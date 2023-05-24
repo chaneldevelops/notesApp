@@ -49,6 +49,13 @@ export default function App() {
     }
     }, [notes])
 
+    React.useEffect(() => {
+        if (currentNote) {
+            setTempNoteText(currentNote.body)
+        }
+    }, [currentNote])//Want tempNote to run anytime current note changes
+
+
     async function createNewNote() {
         const newNote = {
             body: "# Type your markdown note's title here",
@@ -76,9 +83,6 @@ export default function App() {
         id of the doc trying to delete */
         //Added as a reference at top in firebase
         await deleteDoc(docRef) //because it returns a promise await is need & async function
-        
-
-
 
         // This manually deleted notes
         // setNotes(oldNotes => oldNotes.filter(note => note.id !== noteId))
