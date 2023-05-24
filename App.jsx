@@ -5,7 +5,12 @@ import Split from "react-split"
 import { nanoid } from "nanoid"
 //Allows to listen to changes in firestore database then make changes in local code
 // For ex if I delete a note it will alert Snapshot and update the changes locally in the callback function
-import { addDoc, onSnapshot, doc, deleteDoc } from "firebase/firestore" 
+import { addDoc,
+     onSnapshot, 
+     doc, 
+     deleteDoc,
+     setDoc 
+} from "firebase/firestore" 
 import { notesCollection, db } from "./firebase"
 
 export default function App() {
@@ -46,20 +51,14 @@ export default function App() {
         setCurrentNoteId(newNoteRef.id)
     }
 
-    function updateNote(text) {
-        setNotes(oldNotes => {
-            const newArray = []
-            for (let i = 0; i < oldNotes.length; i++) {
-                const oldNote = oldNotes[i]
-                if (oldNote.id === currentNoteId) {
-                    // Put the most recently-modified note at the top
-                    newArray.unshift({ ...oldNote, body: text })
-                } else {
-                    newArray.push(oldNote)
-                }
-            }
-            return newArray
-        })
+    async function updateNote(text) {
+        //Because onSnapshot this will automatically update locally
+        //This saves all of our notes in firestore database so when refreshing it is still saved
+        const docRef = doc(db, "notes", currentNoteId)
+        await setDoc(
+            docRef, 
+            { body:text }, //Takes the object and overwrites the exisiting doc in firestore
+            { merge: true }) //Merges the body object into the exisiting object in firestore
     }
 
     async function deleteNote(noteId) {
