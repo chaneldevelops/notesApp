@@ -16,6 +16,7 @@ import { notesCollection, db } from "./firebase"
 export default function App() {
     const [notes, setNotes] = React.useState([])
     const [currentNoteId, setCurrentNoteId] = React.useState("")
+    const [tempNoteText, setTempNoteText] = React.useState("") //this will display changing text instead of currentNote data
     
     const currentNote = 
         notes.find(note => note.id === currentNoteId) 
@@ -101,8 +102,8 @@ export default function App() {
                             deleteNote={deleteNote}
                         />
                             <Editor
-                                currentNote={currentNote}
-                                updateNote={updateNote}
+                                tempNoteText={tempNoteText}
+                                setTempNoteText={setTempNoteText}
                             />
                         
                     </Split>
