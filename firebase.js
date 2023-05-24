@@ -20,8 +20,8 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 // This returns an instance of the database
-const db = getFirestore(app)
+export const db = getFirestore(app)
 // Calling a function from firebase called collection
 //Pass the db/database function so firebase knows which database to find it in
 // "notes" is the name of the collection I want to grab 
-const notesCollection = collection(db, "notes")
+export const notesCollection = collection(db, "notes")

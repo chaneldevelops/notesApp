@@ -5,8 +5,8 @@ import Split from "react-split"
 import { nanoid } from "nanoid"
 //Allows to listen to changes in firestore database then make changes in local code
 // For ex if I delete a note it will alert Snapshot and update the changes locally in the callback function
-import { addDoc, onSnapshot } from "firebase/firestore" 
-import { notesCollection } from "./firebase"
+import { addDoc, onSnapshot, doc, deleteDoc } from "firebase/firestore" 
+import { notesCollection, db } from "./firebase"
 
 export default function App() {
     const [notes, setNotes] = React.useState([])
@@ -56,9 +56,18 @@ export default function App() {
         })
     }
 
-    function deleteNote(event, noteId) {
-        event.stopPropagation()
-        setNotes(oldNotes => oldNotes.filter(note => note.id !== noteId))
+    async function deleteNote(noteId) {
+        //Reference to doc wanting to delete
+        const docRef = doc(db, "notes", noteId) /*Database instance, name of collection to delete a doc from, 
+        id of the doc trying to delete */
+        //Added as a reference at top in firebase
+        await deleteDoc(docRef) //because it returns a promise await is need & async function
+        
+
+
+
+        // This manually deleted notes
+        // setNotes(oldNotes => oldNotes.filter(note => note.id !== noteId))
     }
 
     return (
