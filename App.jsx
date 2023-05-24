@@ -10,9 +10,7 @@ import { notesCollection, db } from "./firebase"
 
 export default function App() {
     const [notes, setNotes] = React.useState([])
-    const [currentNoteId, setCurrentNoteId] = React.useState(
-        (notes[0]?.id) || ""
-    )
+    const [currentNoteId, setCurrentNoteId] = React.useState("")
     
     const currentNote = 
         notes.find(note => note.id === currentNoteId) 
@@ -31,6 +29,14 @@ export default function App() {
         })
         return unsubscribe //React will call to clean up side effects
     }, [])
+
+    React.useEffect(() => {
+       /*Anytime notes array changes check if there's no currentNote id then 
+       "set" currentNote id at index of 0 ?.id */
+       if (!currentNoteId) {
+        setCurrentNoteId(notes[0]?.id)
+    }
+    }, [notes])
 
     async function createNewNote() {
         const newNote = {
