@@ -24,7 +24,7 @@ export default function App() {
 
     const sortedNotes = notes.sort((a , b) => b.updatedAt - a.updatedAt) /*a represents one of the notes 
     and b represents the next note. 
-    Make sure to use b.updatedAt first */
+    Make sure to use b.updatedAt first or it won't place the most recent first */
 
     React.useEffect(() => {
         //Only want to setup when mounts
