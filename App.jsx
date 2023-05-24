@@ -45,7 +45,10 @@ export default function App() {
 
     async function createNewNote() {
         const newNote = {
-            body: "# Type your markdown note's title here"
+            body: "# Type your markdown note's title here",
+            //Updated properties
+            createdAt: Date.now(),
+             updatedAt: Date.now()
         }
         const newNoteRef = await addDoc(notesCollection, newNote) //returns a promise so use await
         setCurrentNoteId(newNoteRef.id)
@@ -57,7 +60,7 @@ export default function App() {
         const docRef = doc(db, "notes", currentNoteId)
         await setDoc(
             docRef, 
-            { body:text }, //Takes the object and overwrites the exisiting doc in firestore
+            { body:text, updatedAt: Date.now() }, //Takes the object and overwrites the exisiting doc in firestore
             { merge: true }) //Merges the body object into the exisiting object in firestore
     }
 
