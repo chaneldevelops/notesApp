@@ -5,13 +5,11 @@ import Split from "react-split"
 import { nanoid } from "nanoid"
 //Allows to listen to changes in firestore database then make changes in local code
 // For ex if I delete a note it will alert Snapshot and update the changes locally in the callback function
-import { onSnapshot } from "firebase/firestore" 
+import { addDoc, onSnapshot } from "firebase/firestore" 
 import { notesCollection } from "./firebase"
 
 export default function App() {
-    const [notes, setNotes] = React.useState(
-        () => JSON.parse(localStorage.getItem("notes")) || []
-    )
+    const [notes, setNotes] = React.useState([])
     const [currentNoteId, setCurrentNoteId] = React.useState(
         (notes[0]?.id) || ""
     )
@@ -24,17 +22,22 @@ export default function App() {
         //Only want to setup when mounts
         //Going to store in a bariable to prevent memory link & give React the ability to unlink itself from the listener
         const unsubscribe = onSnapshot(notesCollection, function(snapshot) { // This will give us the most updated notes from notesCollection
+            //Sync up our local notes array with the snapshot data
+            const notesArr = snapshot.docs.map(doc => ({ //For every document return an object that has all data from doc
+                ...doc.data(),
+                id: doc.id
+            }))
+           setNotes(notesArr)
         })
         return unsubscribe //React will call to clean up side effects
     }, [])
 
-    function createNewNote() {
+    async function createNewNote() {
         const newNote = {
-            id: nanoid(),
             body: "# Type your markdown note's title here"
         }
-        setNotes(prevNotes => [newNote, ...prevNotes])
-        setCurrentNoteId(newNote.id)
+        const newNoteRef = await addDoc(notesCollection, newNote) //returns a promise so use await
+        setCurrentNoteId(newNoteRef.id)
     }
 
     function updateNote(text) {
