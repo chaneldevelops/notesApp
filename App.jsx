@@ -55,6 +55,20 @@ export default function App() {
         }
     }, [currentNote])//Want tempNote to run anytime current note changes
 
+    /**
+     * Create a useEffect that runs any time the tempNoteText changes
+     * Delay the sending of the request to Firebase
+     *  uses setTimeout (this does the debouncing/delay) it's waiting 500ms to update the note
+     * use clearTimeout to cancel the timeout
+     */
+    React.useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            updateNote(tempNoteText)
+        }, 500)
+        return () => clearTimeout(timeoutId) //Clean up any effects
+    }, [tempNoteText])
+
+
 
     async function createNewNote() {
         const newNote = {
