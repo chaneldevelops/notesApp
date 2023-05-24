@@ -63,7 +63,11 @@ export default function App() {
      */
     React.useEffect(() => {
         const timeoutId = setTimeout(() => {
-            updateNote(tempNoteText)
+            /*This checks for if the tempNote is updated with a note 
+            then it will move the current note up*/
+            if (tempNoteText !== currentNote.body) {
+                updateNote(tempNoteText) 
+            }
         }, 500)
         return () => clearTimeout(timeoutId) //Clean up any effects
     }, [tempNoteText])
