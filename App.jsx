@@ -21,6 +21,11 @@ export default function App() {
         notes.find(note => note.id === currentNoteId) 
         || notes[0]
 
+
+    const sortedNotes = notes.sort((a , b) => b.updatedAt - a.updatedAt) /*a represents one of the notes 
+    and b represents the next note. 
+    Make sure to use b.updatedAt first */
+
     React.useEffect(() => {
         //Only want to setup when mounts
         //Going to store in a bariable to prevent memory link & give React the ability to unlink itself from the listener
@@ -89,7 +94,7 @@ export default function App() {
                         className="split"
                     >
                         <Sidebar
-                            notes={notes}
+                            notes={sortedNotes}
                             currentNote={currentNote}
                             setCurrentNoteId={setCurrentNoteId}
                             newNote={createNewNote}
