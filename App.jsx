@@ -76,7 +76,7 @@ export default function App() {
 
     async function createNewNote() {
         const newNote = {
-            body: "# Type your markdown note's title here",
+            body: "# Create a note. Hit preview to see it live",
             //Updated properties
             createdAt: Date.now(),
              updatedAt: Date.now()
